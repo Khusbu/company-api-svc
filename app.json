@@ -1,0 +1,13 @@
+{
+  "name": "Company API Service",
+  "description": "A sample API service in Go",
+  "keywords": [
+    "go",
+    "sample",
+    "example"
+  ],
+  "image": "heroku/go:1.7",
+  "mount_dir": "src/github.com/Khusbu/company-api-svc",
+  "website": "http://github.com/Khusbu/company-api-svc",
+  "repository": "http://github.com/Khusbu/company-api-svc"
+}
