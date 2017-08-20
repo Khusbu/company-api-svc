@@ -8,6 +8,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+var (
+	errorJSON          = map[string]string{"error": "something didn't work on our side"}
+	recordNotFoundJSON = map[string]string{"error": "uh oh! company not found"}
+)
+
 // Create creates a new record in the database
 func Create(c *gin.Context) {
 	company := Company{}
@@ -15,7 +20,8 @@ func Create(c *gin.Context) {
 	company.FundingDetails = &FundingDetails{Amount: 123}
 	if err := CreateRecord(company); err != nil {
 		log.Printf("Error creating record: %q", err)
-		c.JSON(http.StatusInternalServerError, nil)
+		c.JSON(http.StatusInternalServerError, errorJSON)
+		return
 	}
 	c.JSON(http.StatusOK, company)
 }
@@ -27,11 +33,11 @@ func Fetch(c *gin.Context) {
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Printf("Record not found: %s", profileID)
-			c.JSON(http.StatusNotFound, nil)
+			c.JSON(http.StatusNotFound, recordNotFoundJSON)
 			return
 		}
 		log.Printf("Error fetching record: %q", err)
-		c.JSON(http.StatusInternalServerError, nil)
+		c.JSON(http.StatusInternalServerError, errorJSON)
 		return
 	}
 	c.JSON(http.StatusOK, company)

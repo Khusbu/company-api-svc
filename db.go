@@ -11,7 +11,7 @@ var (
 	dbc *gorm.DB
 )
 
-// CreateTables creates tables for each model
+// CreateTables creates tables for each model //TODO add error handling
 func CreateTables() {
 	dbc.CreateTable(&Company{}, &FundingDetails{})
 	dbc.Model(&FundingDetails{}).AddForeignKey("profile_id", "companies(profile_id)", "RESTRICT", "RESTRICT")
@@ -39,5 +39,5 @@ func SetUpDB() {
 	if err != nil {
 		log.Fatalf("Error opening database: %q", err)
 	}
-	CreateTables()
+	// CreateTables() //TODO uncomment
 }
