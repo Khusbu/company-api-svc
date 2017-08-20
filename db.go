@@ -19,7 +19,7 @@ func CreateTables() {
 }
 
 // CreateRecord creates a company record in the database
-func CreateRecord(company interface{}) error {
+func CreateRecord(company Company) error {
 	return dbc.Create(&company).Error
 }
 
@@ -39,5 +39,6 @@ func SetUpDB() {
 	if err != nil {
 		log.Fatalf("Error opening database: %q", err)
 	}
+	dbc.LogMode(true)
 	// CreateTables() //TODO uncomment
 }
