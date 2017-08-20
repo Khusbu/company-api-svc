@@ -15,7 +15,7 @@ func Create(c *gin.Context) {
 	company.FundingDetails = &FundingDetails{Amount: 123}
 	if err := CreateRecord(company); err != nil {
 		log.Printf("Error creating record: %q", err)
-		c.JSON(http.StatusInternalServerError, nil) //TODO pass some data
+		c.JSON(http.StatusInternalServerError, nil)
 	}
 	c.JSON(http.StatusOK, company)
 }
@@ -31,7 +31,7 @@ func Fetch(c *gin.Context) {
 			return
 		}
 		log.Printf("Error fetching record: %q", err)
-		c.JSON(http.StatusInternalServerError, nil) //TODO pass some data
+		c.JSON(http.StatusInternalServerError, nil)
 		return
 	}
 	c.JSON(http.StatusOK, company)
