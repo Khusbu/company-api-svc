@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 var (
@@ -35,7 +36,7 @@ func main() {
 		c.JSON(http.StatusOK, map[string]string{"hello": "world"})
 	})
 
-	router.GET("/company/new", Create)
+	router.POST("/company/new", Create)
 
 	router.Run(":" + port)
 }
