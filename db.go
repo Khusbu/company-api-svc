@@ -18,12 +18,12 @@ func CreateTables() {
 	dbc.AutoMigrate(&Company{}, &FundingDetails{})
 }
 
-// CreateRecord creates a record in the database
-func CreateRecord(model interface{}) error {
-	return dbc.Create(model).Error
+// CreateRecord creates a company record in the database
+func CreateRecord(company interface{}) error {
+	return dbc.Create(&company).Error
 }
 
-// FetchRecord fetches a record from the database having profile_id `id`
+// FetchRecord fetches a company record from the database having profile_id `id`
 func FetchRecord(id string) (Company, error) {
 	var company Company
 	if err := dbc.Preload("FundingDetails").Where("profile_id = ?", id).First(&company).Error; err != nil {
