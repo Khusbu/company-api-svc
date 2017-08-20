@@ -37,6 +37,7 @@ func main() {
 	})
 
 	router.POST("/company/new", Create)
+	router.GET("/company/:profile_id", Fetch)
 
 	router.Run(":" + port)
 }
