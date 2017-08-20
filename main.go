@@ -7,12 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-)
-
-var (
-	dbc *gorm.DB
 )
 
 func main() {
@@ -21,16 +16,12 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-
-	var err error
-	dbc, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatalf("Error opening database: %q", err)
-	}
-	CreateTables()
+	SetUpDB()
 
 	router := gin.New()
 	router.Use(gin.Logger())
+	// Recovery middleware recovers from any panics and writes a 500 if there was one.
+	router.Use(gin.Recovery())
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, map[string]string{"hello": "world"})
