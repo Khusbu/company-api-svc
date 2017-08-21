@@ -91,10 +91,20 @@ $ curl http://localhost:5000/company/new \
 }
 ```
 
+**Example Error Response**
+
+```json
+{
+	"error": "invalid value/format. please refer to the documentation.",
+	"field": "logo"
+}
+```
+
 #### GET - `/company/:profile_id`
 Fetches a company record with the Profile ID as `profile_id`.
 
 **Example Request**
+
 ```curl
 curl http://localhost:5000/company/cmp_aUCpqLKTAUwAuL0h
 ```
@@ -135,6 +145,14 @@ curl http://localhost:5000/company/cmp_aUCpqLKTAUwAuL0h
 }
 ```
 
+**Example Error Response**
+
+```json
+{
+	"error": "uh oh! company not found"
+}
+```
+
 ### Running Locally Using Heroku
 
 Make sure you have [Go](http://golang.org/doc/install) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
@@ -157,3 +175,8 @@ $ heroku create <app-name>
 $ git push heroku master
 $ heroku open
 ```
+
+### TODO
+- Well-crafted error messages. To be made less generic.
+- Date validations to be added.
+- Support for input format other than JSON to be added.
