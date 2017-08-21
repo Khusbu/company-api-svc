@@ -9,18 +9,27 @@ import (
 )
 
 var (
-	errorJSON          = map[string]string{"error": "something didn't work on our side"}
-	recordNotFoundJSON = map[string]string{"error": "uh oh! company not found"}
+	internalError  = map[string]string{"error": "something didn't work on our side"}
+	recordNotFound = map[string]string{"error": "uh oh! company not found"}
+	badRequest     = map[string]string{"error": "please send data in proper JSON format"}
 )
 
 // Create creates a new record in the database
 func Create(c *gin.Context) {
-	company := Company{}
-	company.SetProfileID()
-	company.FundingDetails = &FundingDetails{Amount: 123}
+	company, err := ConvertPostDatatoModel(c)
+	if err != nil {
+		log.Printf("Error in retrieving post data: %q", err)
+		c.JSON(http.StatusBadRequest, badRequest)
+		return
+	}
+	if err := company.Validate(); err != nil {
+		log.Printf("Invalid field format: %q", err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
 	if err := CreateRecord(company); err != nil {
 		log.Printf("Error creating record: %q", err)
-		c.JSON(http.StatusInternalServerError, errorJSON)
+		c.JSON(http.StatusInternalServerError, internalError)
 		return
 	}
 	c.JSON(http.StatusOK, company)
@@ -33,11 +42,11 @@ func Fetch(c *gin.Context) {
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Printf("Record not found: %s", profileID)
-			c.JSON(http.StatusNotFound, recordNotFoundJSON)
+			c.JSON(http.StatusNotFound, recordNotFound)
 			return
 		}
 		log.Printf("Error fetching record: %q", err)
-		c.JSON(http.StatusInternalServerError, errorJSON)
+		c.JSON(http.StatusInternalServerError, internalError)
 		return
 	}
 	c.JSON(http.StatusOK, company)
