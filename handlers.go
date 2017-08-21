@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -24,7 +25,7 @@ func Create(c *gin.Context) {
 	}
 	if err := company.Validate(); err != nil {
 		log.Printf("Invalid field format: %q", err)
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, map[string]string{"field": strings.Split(err.Error(), ":")[0], "error": "invalid value/format. please refer to the documentation."})
 		return
 	}
 	if err := CreateRecord(company); err != nil {

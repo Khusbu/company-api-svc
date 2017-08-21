@@ -41,5 +41,5 @@ func SetUpDB() {
 		log.Fatalf("Error opening database: %q", err)
 	}
 	dbc.LogMode(true)
-	// CreateTables() //TODO uncomment
+	CreateTables()
 }
